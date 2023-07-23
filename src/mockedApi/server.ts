@@ -10,6 +10,6 @@ export const serveMockedApi = async () => {
     nock('http://mocked-banks')
       .get(`/api/${bank}`)
       .times(Infinity)
-      .reply(200, { data: parsedJSON });
+      .reply(200, parsedJSON);
   }
 };
