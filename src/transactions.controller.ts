@@ -1,42 +1,31 @@
 import {
   Controller,
   Get,
+  HttpException,
   InternalServerErrorException,
   Query,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
+import UnifiedTransaction from './data-types/unified-transaction';
 
-import RevolutTransaction from './dataTypes/RevolutTransaction';
-import UnifiedTransaction from './dataTypes/UnifiedTransaction';
-
-@Controller()
+@Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
-  @Get('/transactions')
-  async getTransactions(): Promise<UnifiedTransaction[] | void> {
-    try {
-      const responseData = await this.transactionsService.getTransactions();
-      return responseData;
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new InternalServerErrorException(err.message);
-      } else {
-        throw new InternalServerErrorException('Unknown error occured');
-      }
-    }
-  }
-
-  @Get('/transactions')
-  async getOneBankTransactions(
+  @Get()
+  async getTransactions(
     @Query('source') source: string,
-  ): Promise<RevolutTransaction[] | void> {
+  ): Promise<UnifiedTransaction[]> {
     try {
-      const responseData =
-        await this.transactionsService.getOneBankTransactions();
-      return responseData;
+      if (source) {
+        return await this.transactionsService.getOneBankTransactions(source);
+      } else {
+        return await this.transactionsService.getAllTransactions();
+      }
     } catch (err) {
-      if (err instanceof Error) {
+      if (err instanceof HttpException) {
+        throw err;
+      } else if (err instanceof Error) {
         throw new InternalServerErrorException(err.message);
       } else {
         throw new InternalServerErrorException('Unknown error occured');

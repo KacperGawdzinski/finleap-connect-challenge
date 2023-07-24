@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { serveMockedApi } from './mockedApi/server';
+import { ExternalApis } from './bank-services/external-apis/external-apis.service';
 
 async function bootstrap() {
-  await serveMockedApi();
   const app = await NestFactory.create(AppModule);
+  await app.get(ExternalApis).serveMockedApi();
   await app.listen(3000);
 }
 bootstrap();
