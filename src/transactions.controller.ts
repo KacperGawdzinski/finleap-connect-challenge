@@ -14,7 +14,7 @@ export class TransactionsController {
 
   @Get()
   async getTransactions(
-    @Query('source') source: string,
+    @Query('source') source?: string,
   ): Promise<UnifiedTransaction[]> {
     try {
       if (source) {

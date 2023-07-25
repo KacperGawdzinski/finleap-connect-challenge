@@ -37,6 +37,10 @@ export class ExternalApis {
       }
     }
   };
+
+  reloadService = () => {
+    this.isProd = process.env.NODE_ENV === 'production';
+  };
 }
 
 const MOCKED_DATA_PATH = './src/bank-services/external-apis/mocked-data';

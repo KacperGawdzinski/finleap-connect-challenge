@@ -4,7 +4,18 @@ import { ExternalApis } from './bank-services/external-apis/external-apis.servic
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.get(ExternalApis).serveMockedApi();
+  try {
+    await app.get(ExternalApis).serveMockedApi();
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(
+        `Unable to launch ExternalApisService. Error: ${err.message}`,
+      );
+    } else {
+      console.error('Unable to launch ExternalApisService');
+    }
+  }
+
   await app.listen(3000);
 }
 bootstrap();
