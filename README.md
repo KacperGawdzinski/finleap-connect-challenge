@@ -1,73 +1,49 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## A solution to the finleap connect code challenge 💻
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+### Technologies
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+| Technology | Description |
+| -------- | -------- |
+| NestJS     | A NodeJS framework for building server-side applications  |
+| Nock     | HTTP server mocking library |
+| @nestjs/axios | NestJS version of axios based on rxjs|
+| Zod | TypeScript-first schema declaration and validation library |
+| Jest | Unit testing framework |
+| Docker | A platform for creating and managing containers |
 
-## Description
+### Start
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+You have two ways to start the project:
+1. Use Docker:
+- to build the project type: `docker build . -t finleap-challenge`
+- start the application with: `docker run -p 3000:3000 finleap-connect`
+2. Manually
+- run `npm install` in a project's directory to install dependencies
+- export an env variable NODE_ENV with `export NODE_ENV=development` in your terminal
+- to start the project type `npm run start:prod` for production build or `npm run start:dev` for development
 
-## Installation
 
-```bash
-$ npm install
-```
+### Description
 
-## Running the app
+In my solution I used NestJS as a server framework to ensure that the backend is properly divided on modules, controllers and services. I did use typescript in strict mode.
 
-```bash
-# development
-$ npm run start
+There are four services in the application: RevolutApi, MonzoApi, SterlingApi and ExternalApi.
 
-# watch mode
-$ npm run start:dev
+First three of them take care of fetching data and transforming it into a unified transaction type. The ExternalApi service is a source of API urls for the application. When launched with **NODE_ENV=development** it will insert mocked links into other services. If launched with **NODE_ENV=production** it would fetch data from the real API (which doesn't exist in the solution because only mocked data was supported)
 
-# production mode
-$ npm run start:prod
-```
+I used Docker to create a multi-stage build for the application and insert mentioned NODE_ENV variable into the container.
 
-## Test
+#### Data is available at:
+- localhost:3000/transactions
+- localhost:3000/transactions?source=${bank}
 
-```bash
-# unit tests
-$ npm run test
+#### Data validation
+Data collected from ex. /api/revolut is validated by zod (z.parse()). If the data is not compatible with the interface then it throws an error. Otherwise, the data is valid and the program keeps running.
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
+### My observations
+- revolut-ts.json file was corrupted, with one comma missing
+- metadata property in unified transaction type was said to be a string and at the same time to be an object containing a source property. I did the second version
+- by 'you have to be able to call those APIs using HTTP as you would do with real ones' I thought that the API should also be accessible via browser. Although technologies like Nock or Sinon are meant to mock requests on the server side. That's why in my solution mocked API is only accessible through the server.
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+@KacperGawdzinski
