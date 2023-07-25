@@ -29,7 +29,7 @@ describe('MonzoApi', () => {
 
   it('should fetch and transform Monzo transactions to UnifiedTransaction', async () => {
     const mockMonzoResponse = {
-      data: [mockMonzoTransaction],
+      data: mockMonzoTransaction,
     };
 
     jest
@@ -57,30 +57,56 @@ describe('MonzoApi', () => {
   });
 });
 
-const mockMonzoTransaction: MonzoTransaction = {
-  id: 'tx_00006FqMjDcX443534534',
-  created: '2023-04-01T08:00:00.000Z',
-  description: 'David Lee',
-  amount: -3500,
-  currency: 'EUR',
-  metadata: {
-    reference: 'SEPA-0987655555',
+const mockMonzoTransaction: MonzoTransaction[] = [
+  {
+    id: 'tx_00006FqMjDcX443534534',
+    created: new Date('2023-04-01T08:00:00.000Z'),
+    description: 'Electricity bill payment',
+    amount: -9500,
+    currency: 'EUR',
+    metadata: {
+      reference: 'SEPA-0987655555',
+    },
   },
-};
+  {
+    id: 'tx_00001YpBqNqL8mWnKf4t2Z',
+    created: new Date('2023-04-05T09:12:00.000Z'),
+    description: 'Income',
+    amount: 400000,
+    currency: 'EUR',
+    metadata: {
+      reference: 'SEPA-0987654321',
+    },
+  },
+];
 
 export const unifiedTransactionMock: UnifiedTransaction[] = [
   {
+    id: 'tx_00006FqMjDcX443534534',
+    created: '2023-04-01T08:00:00.000Z',
     amount: {
       currency: 'EUR',
-      value: '-35.00',
+      value: '-95.00',
     },
-    created: '2023-04-01T08:00:00.000Z',
-    description: 'David Lee',
-    id: 'tx_00006FqMjDcX443534534',
+    reference: 'SEPA-0987655555',
+    description: 'Electricity bill payment',
+    type: 'DEBIT',
     metadata: {
       source: 'Monzo',
     },
-    reference: 'SEPA-0987655555',
-    type: 'DEBIT',
+  },
+  {
+    id: 'tx_00001YpBqNqL8mWnKf4t2Z',
+    created: '2023-04-05T09:12:00.000Z',
+    amount: {
+      currency: 'EUR',
+      value: '4000.00',
+    },
+    reference: 'SEPA-0987654321',
+    description: 'Income',
+    type: 'CREDIT',
+    metadata: {
+      source: 'Monzo',
+    },
   },
 ];

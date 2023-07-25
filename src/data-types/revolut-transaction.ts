@@ -12,8 +12,8 @@ const RevolutTransactionCounterparty = z.object({
 
 const RevolutTransaction = z.object({
   id: z.string(),
-  created_at: z.string(),
-  completed_at: z.string(),
+  created_at: z.coerce.date(),
+  completed_at: z.coerce.date(),
   state: z.string(),
   amount: RevolutTransactionAmount,
   merchant: z.string().nullable(),

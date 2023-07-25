@@ -6,7 +6,7 @@ const SterlingTransaction = z.object({
   amount: z.string(),
   direction: z.string(),
   narrative: z.string(),
-  created: z.string(),
+  created: z.coerce.date(),
   reference: z.string(),
 });
 

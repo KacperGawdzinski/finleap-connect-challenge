@@ -30,7 +30,7 @@ export class SterlingApi implements BankApi {
   ): UnifiedTransaction => {
     return {
       id: transaction.id,
-      created: transaction.created,
+      created: transaction.created.toISOString(),
       description: transaction.narrative,
       amount: {
         currency: transaction.currency,

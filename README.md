@@ -40,10 +40,13 @@ I used Docker to create a multi-stage build for the application and insert menti
 #### Data validation
 Data collected from ex. /api/revolut is validated by zod (z.parse()). If the data is not compatible with the interface then it throws an error. Otherwise, the data is valid and the program keeps running.
 
+#### Running tests
+To run tests type in terminal: `npm run test`
 
 ### My observations
 - revolut-ts.json file was corrupted, with one comma missing
 - metadata property in unified transaction type was said to be a string and at the same time to be an object containing a source property. I did the second version
+- revolut transaction doesn't have a 'description' property so based on the value of transfer I set the description to: 'Transfer to/from <counterparty.name>
 - by 'you have to be able to call those APIs using HTTP as you would do with real ones' I thought that the API should also be accessible via browser. Although technologies like Nock or Sinon are meant to mock requests on the server side. That's why in my solution mocked API is only accessible through the server.
 
 @KacperGawdzinski

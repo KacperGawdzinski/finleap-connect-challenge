@@ -30,7 +30,7 @@ export class MonzoApi implements BankApi {
   ): UnifiedTransaction => {
     return {
       id: transaction.id,
-      created: transaction.created,
+      created: transaction.created.toISOString(),
       description: transaction.description,
       amount: {
         currency: transaction.currency,

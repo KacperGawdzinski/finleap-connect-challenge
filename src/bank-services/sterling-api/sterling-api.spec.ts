@@ -29,7 +29,7 @@ describe('SterlingApi', () => {
 
   it('should fetch and transform Sterling transactions to UnifiedTransaction', async () => {
     const mockSterlingResponse = {
-      data: [mockSterlingTransaction],
+      data: mockSterlingTransaction,
     };
 
     jest
@@ -57,29 +57,54 @@ describe('SterlingApi', () => {
   });
 });
 
-const mockSterlingTransaction: SterlingTransaction = {
-  id: 'tx_00006FqMjDcX443534534',
-  currency: 'EUR',
-  amount: '-35.00',
-  created: '2023-04-01T08:00:00.000Z',
-  direction: 'OUT',
-  narrative: 'David Lee',
-  reference: 'SEPA-0987655555',
-};
+const mockSterlingTransaction: SterlingTransaction[] = [
+  {
+    id: '902f06f1-c3ce-42fc-b85c-b93b0fc0be9f',
+    currency: 'EUR',
+    amount: '-12.99',
+    direction: 'OUT',
+    narrative: 'Online shopping',
+    created: new Date('2023-04-01T11:11:00.000Z'),
+    reference: 'SEPA-1234567893',
+  },
+  {
+    id: 'e90a5c5f-4e80-4d4f-a1f3-7e8825cf5fb5',
+    currency: 'EUR',
+    amount: '45.00',
+    direction: 'IN',
+    narrative: 'Refund for returned item',
+    created: new Date('2023-04-03T08:17:00.000Z'),
+    reference: 'SEPA-1234567894',
+  },
+];
 
 const unifiedTransactionMock: UnifiedTransaction[] = [
   {
+    id: '902f06f1-c3ce-42fc-b85c-b93b0fc0be9f',
+    created: '2023-04-01T11:11:00.000Z',
+    description: 'Online shopping',
     amount: {
       currency: 'EUR',
-      value: '-35.00',
+      value: '-12.99',
     },
-    created: '2023-04-01T08:00:00.000Z',
-    description: 'David Lee',
-    id: 'tx_00006FqMjDcX443534534',
     metadata: {
       source: 'Sterling',
     },
-    reference: 'SEPA-0987655555',
+    reference: 'SEPA-1234567893',
     type: 'DEBIT',
+  },
+  {
+    id: 'e90a5c5f-4e80-4d4f-a1f3-7e8825cf5fb5',
+    created: '2023-04-03T08:17:00.000Z',
+    description: 'Refund for returned item',
+    amount: {
+      currency: 'EUR',
+      value: '45.00',
+    },
+    metadata: {
+      source: 'Sterling',
+    },
+    reference: 'SEPA-1234567894',
+    type: 'CREDIT',
   },
 ];

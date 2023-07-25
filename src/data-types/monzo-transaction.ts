@@ -6,7 +6,7 @@ const MonzoTransactionMetadata = z.object({
 
 const MonzoTransaction = z.object({
   id: z.string(),
-  created: z.string(),
+  created: z.coerce.date(),
   description: z.string(),
   amount: z.number(),
   currency: z.string(),

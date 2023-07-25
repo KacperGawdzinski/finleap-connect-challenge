@@ -29,7 +29,7 @@ describe('RevolutApi', () => {
 
   it('should fetch and transform Revolut transactions to UnifiedTransaction', async () => {
     const mockRevolutResponse = {
-      data: [mockRevolutTransaction],
+      data: mockRevolutTransaction,
     };
 
     jest
@@ -57,36 +57,68 @@ describe('RevolutApi', () => {
   });
 });
 
-const mockRevolutTransaction: RevolutTransaction = {
-  id: 'tx_00006FqMjDcX443534534',
-  created_at: '2023-04-01T08:00:00.000Z',
-  completed_at: '2023-03-01T08:03:00.000Z',
-  amount: {
-    currency: 'EUR',
-    value: '-35.00',
-  },
-  counterparty: {
-    id: 'acc_1234567903',
-    name: 'David Lee',
-  },
-  merchant: null,
-  state: 'COMPLETED',
-  reference: 'SEPA-0987655555',
-};
-
-const unifiedTransactionMock: UnifiedTransaction[] = [
+const mockRevolutTransaction: RevolutTransaction[] = [
   {
+    id: 'tr_0987654321',
+    created_at: new Date('2022-03-21T14:16:32.000Z'),
+    completed_at: new Date('2022-03-21T14:18:32.000Z'),
+    state: 'COMPLETED',
     amount: {
       currency: 'EUR',
       value: '-35.00',
     },
-    created: '2023-04-01T08:00:00.000Z',
-    description: 'David Lee',
-    id: 'tx_00006FqMjDcX443534534',
+    counterparty: {
+      id: 'acc_1234567903',
+      name: 'David Lee',
+    },
+    merchant: null,
+    reference: 'SEPA-0987654321',
+  },
+  {
+    id: 'tr_1357908642',
+    created_at: new Date('2023-04-01T08:00:00.000Z'),
+    completed_at: new Date('2023-03-01T08:03:00.000Z'),
+    amount: {
+      currency: 'PLN',
+      value: '23.00',
+    },
+    counterparty: {
+      id: 'acc_5464667903',
+      name: 'Martin King',
+    },
+    merchant: null,
+    state: 'COMPLETED',
+    reference: 'SEPA-0987632355',
+  },
+];
+
+const unifiedTransactionMock: UnifiedTransaction[] = [
+  {
+    id: 'tr_0987654321',
+    created: '2022-03-21T14:16:32.000Z',
+    description: 'Transfer to David Lee',
+    amount: {
+      currency: 'EUR',
+      value: '-35.00',
+    },
     metadata: {
       source: 'Revolut',
     },
-    reference: 'SEPA-0987655555',
+    reference: 'SEPA-0987654321',
     type: 'DEBIT',
+  },
+  {
+    id: 'tr_1357908642',
+    created: '2023-04-01T08:00:00.000Z',
+    amount: {
+      currency: 'PLN',
+      value: '23.00',
+    },
+    metadata: {
+      source: 'Revolut',
+    },
+    description: 'Transfer from Martin King',
+    reference: 'SEPA-0987632355',
+    type: 'CREDIT',
   },
 ];

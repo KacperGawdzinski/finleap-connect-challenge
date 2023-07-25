@@ -30,8 +30,10 @@ export class RevolutApi implements BankApi {
   ): UnifiedTransaction => {
     return {
       id: transaction.id,
-      created: transaction.created_at,
-      description: transaction.counterparty.name,
+      created: transaction.created_at.toISOString(),
+      description: `Transfer ${
+        transaction.amount.value.startsWith('-') ? 'to' : 'from'
+      } ${transaction.counterparty.name}`,
       amount: transaction.amount,
       type: transaction.amount.value.startsWith('-') ? 'DEBIT' : 'CREDIT',
       reference: transaction.reference,
